@@ -5,6 +5,7 @@ namespace JieAnthony\LaravelOctaneWorkerman;
 use Illuminate\Support\ServiceProvider;
 use JieAnthony\LaravelOctaneWorkerman\Commands\WorkermanGatewayWorkerMakeSocketsCommand;
 use JieAnthony\LaravelOctaneWorkerman\Commands\WorkermanGatewayWorkerMakeEventsCommand;
+use JieAnthony\LaravelOctaneWorkerman\Commands\WorkermanGatewayWorkerMakeCustomProcessCommand;
 
 class WorkermanGatewayWorkerServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class WorkermanGatewayWorkerServiceProvider extends ServiceProvider
                 'octane.gatewayworker' => config('workerman.gatewayworker'),
             ]);
         }
+
+        Gateway::resolveRegisterAddress();
     }
 
     public function boot()
@@ -31,6 +34,7 @@ class WorkermanGatewayWorkerServiceProvider extends ServiceProvider
             $this->commands([
                 WorkermanGatewayWorkerMakeSocketsCommand::class,
                 WorkermanGatewayWorkerMakeEventsCommand::class,
+                WorkermanGatewayWorkerMakeCustomProcessCommand::class,
             ]);
         }
     }
