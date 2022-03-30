@@ -30,6 +30,8 @@ class LaravelOctaneWorkermanServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->publishes([__DIR__ . '/../config/workerman.php' => config_path('workerman.php')], 'laravel-octance-workerman');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 StartWorkermanHttpCommand::class,

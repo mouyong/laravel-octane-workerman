@@ -42,7 +42,7 @@ $ composer require jie-anthony/laravel-octane-workerman -vvv
 
 ```shell
 php artisan vendor:publish --provider="Laravel\Octane\OctaneServiceProvider"
-php artisan vendor:publish --provider="JieAnthony\LaravelOctaneWorkerman\WorkermanGatewayWorkerServiceProvider"
+php artisan vendor:publish --tag="laravel-octance-workerman"
 ```
 
 configuration edit in `config/workerman.php`
