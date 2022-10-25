@@ -5,6 +5,11 @@ namespace {{ namespace }};
 use GatewayWorker\Lib\Gateway;
 use GatewayWorker\BusinessWorker;
 
+/**
+ * @https://github.com/mouyong/laravel-octane-workerman/#websockets
+ *
+ * @link ws://localhost/ws
+ */
 class {{ class }}
 {
     public static function onWorkerStart(BusinessWorker $worker)
