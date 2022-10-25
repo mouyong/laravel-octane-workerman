@@ -70,7 +70,7 @@ return [
         'host' => '0.0.0.0',
         'port' => 7400,
         'name' => env('APP_NAME', 'laravel-workerman') . ' BusinessWorker',
-        'count' => cpu_count() * 2,
+        'count' => 1 || cpu_count() * 2, // 每个进程相当于一个游戏大区的概念
         'registerAddress' => '127.0.0.1:7100',
         'onWorkerStart' => null,
         'onWorkerStop' => null,
