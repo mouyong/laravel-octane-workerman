@@ -13,7 +13,7 @@ class {{ class }}
 
     public static function onMessage()
     {
-        var_dump(config('app.debug'));
+        var_dump('debug mode enable? ' . config('app.debug'));
         var_dump($args = func_get_args());
     }
 
