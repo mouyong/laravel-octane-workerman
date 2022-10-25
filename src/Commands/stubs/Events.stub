@@ -13,8 +13,23 @@ class {{ class }}
 
     public static function onMessage()
     {
+        $args = func_get_args();
+
+        [$clientId, $message] = $args;
+
+        try {
+            $data = json_decode(strval($message), true) ?? [];
+        } catch (\Throwable $e) {
+            $data = [];
+        }
+
+        if (!is_array($data)) {
+            $data = [];
+        }
+
         var_dump('debug mode enable? ' . config('app.debug'));
-        var_dump($args = func_get_args());
+        var_dump(sprintf('client_id %s send to server message: %s', $clientId, $message));
+        var_dump('receive data: '.var_export($data, true));
     }
 
     public static function onWorkerStop(BusinessWorker $worker)
