@@ -2,6 +2,7 @@
 
 namespace {{ namespace }};
 
+use GatewayWorker\Lib\Gateway;
 use GatewayWorker\BusinessWorker;
 
 class {{ class }}
@@ -30,6 +31,9 @@ class {{ class }}
         var_dump('debug mode enable? ' . config('app.debug'));
         var_dump(sprintf('client_id %s send to server message: %s', $clientId, $message));
         var_dump('receive data: '.var_export($data, true));
+
+        Gateway::bindUid($client_id, $uid = uniqid());
+        Gateway::sendToUid($uid, 'you said: '.$message);
     }
 
     public static function onWorkerStop(BusinessWorker $worker)
