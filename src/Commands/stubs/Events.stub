@@ -16,7 +16,7 @@ class {{ class }}
     {
         $args = func_get_args();
 
-        [$clientId, $message] = $args;
+        [$client_id, $message] = $args;
 
         try {
             $data = json_decode(strval($message), true) ?? [];
@@ -29,7 +29,7 @@ class {{ class }}
         }
 
         var_dump('debug mode enable? ' . config('app.debug'));
-        var_dump(sprintf('client_id %s send to server message: %s', $clientId, $message));
+        var_dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
         var_dump('receive data: '.var_export($data, true));
 
         Gateway::bindUid($client_id, $uid = uniqid());
