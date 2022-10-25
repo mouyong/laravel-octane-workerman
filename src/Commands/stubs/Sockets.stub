@@ -2,13 +2,15 @@
 
 namespace {{ namespace }};
 
+use GatewayWorker\Gateway;
+
 class {{ class }}
 {
-    public static function onWorkerStart($connection)
+    public static function onWorkerStart(Gateway $worker)
     {
     }
 
-    public static function onWorkerStop($connection)
+    public static function onWorkerStop(Gateway $worker)
     {
     }
     
