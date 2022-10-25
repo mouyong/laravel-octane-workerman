@@ -2,9 +2,11 @@
 
 namespace {{ namespace }};
 
+use GatewayWorker\BusinessWorker;
+
 class {{ class }}
 {
-    public static function onWorkerStart($worker)
+    public static function onWorkerStart(BusinessWorker $worker)
     {
         create_laravel_application_for_worker($worker);
     }
@@ -12,11 +14,11 @@ class {{ class }}
     public static function onMessage()
     {
         var_dump(config('app.debug'));
-        var_dump(func_get_args());
+        var_dump($args = func_get_args());
     }
 
-    public static function onWorkerStop($connection)
+    public static function onWorkerStop(BusinessWorker $worker)
     {
-        $connection->close();
+        var_dump(sprintf('%s #%s stop', $worker->name, $worker->id));
     }
 }
