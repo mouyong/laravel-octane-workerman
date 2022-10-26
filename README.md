@@ -110,7 +110,7 @@ location /ws {
     proxy_set_header Connection 'Upgrade';
 }
 ```
-test connection to websocket
+test connection to websocket using blow code or in these website: 1. https://websocketking.com/ 2. http://www.websocket-test.com/
 
 ```
 var ws = new WebSocket('ws://127.0.0.1:7000/ws')
