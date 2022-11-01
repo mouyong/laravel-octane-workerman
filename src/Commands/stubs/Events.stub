@@ -20,7 +20,7 @@ class {{ class }}
     public static function onConnect(string $client_id)
     {
         // 建立连接
-        Gateway::sendToAll(sprintf('client_id %s connect', $client_id));
+        var_dump(sprintf('client_id #%s connect', $client_id));
     }
 
     public static function onMessage()
@@ -50,7 +50,7 @@ class {{ class }}
     public static function onClose(string $client_id)
     {
         // 清理数据
-        Gateway::sendToAll(sprintf('client_id %s exit', $client_id));
+        var_dump(sprintf('client_id #%s disconnect', $client_id));
     }
 
     public static function onWorkerStop(BusinessWorker $worker)
