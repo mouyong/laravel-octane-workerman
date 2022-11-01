@@ -91,8 +91,8 @@ class {{ class }}
                 $_SESSION['uid'] = uniqid();
                 break;
             case 'chat.send':
-                $to_user = $data['data']['to_user'] ?? null;
-                $content = $data['data']['content'] ?? null;
+                $to_user = data_get($data, 'data.to_user');
+                $content = data_get($data, 'data.content');
 
                 if (!$to_user) {
                     return Gateway::sendToClient($client_id, downlink(Events::CHAT_SEND_RESP, null, 400, 'Please select chat_room'));
