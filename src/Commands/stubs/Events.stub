@@ -70,9 +70,9 @@ class {{ class }}
         $uid = Gateway::getUidByClientId($client_id);
 
         // 检验用户是否登录
-        $player = $_SESSION['uid'] ?? null;
+        $user = $_SESSION['uid'] ?? null;
         if (!in_array($eventType, Events::$whiteEvent)) {
-            if (!$player) {
+            if (!$user) {
                 return Gateway::sendToClient($client_id, downlink(Events::LOGIN_RESP, null, 403, 'Please login.'));
             }
         }
