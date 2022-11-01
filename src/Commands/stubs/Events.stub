@@ -17,6 +17,12 @@ class {{ class }}
         create_laravel_application_for_worker($worker);
     }
 
+    public static function onConnect(string $client_id)
+    {
+        // 建立连接
+        Gateway::sendToAll(sprintf('client_id %s connect', $client_id));
+    }
+
     public static function onMessage()
     {
         $args = func_get_args();
@@ -39,6 +45,12 @@ class {{ class }}
 
         Gateway::bindUid($client_id, $uid = uniqid());
         Gateway::sendToUid($uid, 'you said: '.$message);
+    }
+
+    public static function onClose(string $client_id)
+    {
+        // 清理数据
+        Gateway::sendToAll(sprintf('client_id %s exit', $client_id));
     }
 
     public static function onWorkerStop(BusinessWorker $worker)
