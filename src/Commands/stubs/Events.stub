@@ -12,6 +12,33 @@ use GatewayWorker\BusinessWorker;
  */
 class {{ class }}
 {
+    public static $whiteEvent = [
+        'pong',
+        'login',
+        'chat.send',
+    ];
+
+    public static function encode(array $message = [])
+    {
+        return json_encode($message, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+
+    public static function decode(string $message)
+    {
+        $data = json_decode($message, true) ?? [];
+        if (json_last_error()) {
+            info('json 解析错误 code: '.json_last_error() ." reason: ". json_last_error_msg(). ' message: '.$message);
+
+            $data = [];
+        }
+
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        return $data;
+    }
+
     public static function onWorkerStart(BusinessWorker $worker)
     {
         create_laravel_application_for_worker($worker);
@@ -26,25 +53,61 @@ class {{ class }}
     public static function onMessage()
     {
         $args = func_get_args();
-
         [$client_id, $message] = $args;
+        $data = Events::decode($message);
 
-        try {
-            $data = json_decode(strval($message), true) ?? [];
-        } catch (\Throwable $e) {
-            $data = [];
-        }
-
-        if (!is_array($data)) {
-            $data = [];
-        }
-
+        dump($_SERVER);
+        dump($_SESSION);
         var_dump('debug mode enable? ' . config('app.debug'));
         var_dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
-        var_dump('receive data: '.var_export($data, true));
+        var_dump('receive data: ' . var_export($data, true));
 
         Gateway::bindUid($client_id, $uid = uniqid());
-        Gateway::sendToUid($uid, 'you said: '.$message);
+        Gateway::sendToUid($uid, 'you said: ' . $message);
+        
+        $eventType = $data['type'] ?? null;
+
+        $uid = Gateway::getUidByClientId($client_id);
+
+        // 检验用户是否登录
+        $player = $_SESSION['uid'] ?? null;
+        if (!in_array($eventType, Events::$whiteEvent)) {
+            if (!$player) {
+                return Gateway::sendToClient($client_id, downlink(Events::LOGIN_RESP, null, 403, 'Please login.'));
+            }
+        }
+        
+        switch ($eventType) {
+                // 维持客户端在线状态
+            case 'pong':
+                $_SESSION['tick_time'] = date('Y-m-d H:i:s', time());
+                break;
+            case 'login':
+                $token = data_get($data, 'data.token');
+                if (!$token) {
+                    return Gateway::sendToClient($client_id, downlink(Events::LOGIN_RESP, null, 500, 'Please login'));
+                }
+
+                $_SESSION['uid'] = uniqid();
+                break;
+            case 'chat.send':
+                $to_user = $data['data']['to_user'] ?? null;
+                $content = $data['data']['content'] ?? null;
+
+                if (!$to_user) {
+                    return Gateway::sendToClient($client_id, downlink(Events::CHAT_SEND_RESP, null, 400, 'Please select chat_room'));
+                }
+
+                if (!$content) {
+                    return Gateway::sendToClient($client_id, downlink(Events::CHAT_SEND_RESP, null, 400, 'Please input message'));
+                }
+
+                Gateway::sendToGroup($to_user, $content);
+                break;
+            default:
+                Gateway::sendToClient($client_id, '非法请求');
+                break;
+        }
     }
 
     public static function onClose(string $client_id)
