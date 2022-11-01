@@ -56,16 +56,16 @@ class {{ class }}
         [$client_id, $message] = $args;
         $data = Events::decode($message);
 
-        dump($_SERVER);
-        dump($_SESSION);
-        var_dump('debug mode enable? ' . config('app.debug'));
-        var_dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
-        var_dump('receive data: ' . var_export($data, true));
+        // dump($_SERVER);
+        // dump($_SESSION);
+        // var_dump('debug mode enable? ' . config('app.debug'));
+        // var_dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
+        // var_dump('receive data: ' . var_export($data, true));
 
-        Gateway::bindUid($client_id, $uid = uniqid());
-        Gateway::sendToUid($uid, 'you said: ' . $message);
+        // Gateway::bindUid($client_id, $uid = uniqid());
+        // Gateway::sendToUid($uid, 'you said: ' . $message);
         
-        $eventType = $data['type'] ?? null;
+        $eventType = $data['event_type'] ?? $data['type'] ?? null;
 
         $uid = Gateway::getUidByClientId($client_id);
 
@@ -88,7 +88,14 @@ class {{ class }}
                     return Gateway::sendToClient($client_id, downlink(Events::LOGIN_RESP, null, 500, 'Please login'));
                 }
 
-                $_SESSION['uid'] = uniqid();
+                $_SESSION['userInfo'] = [];
+                $_SESSION['userInfo']['uid'] = uniqid();
+                Gateway::updateSession($client_id, [
+                    'userInfo' => [
+                        'userName' => uniqid(),
+                    ],
+                ]);
+                Gateway::bindUid($client_id, $_SESSION['userInfo']['uid']);
                 break;
             case 'chat.send':
                 $to_user = data_get($data, 'data.to_user');
