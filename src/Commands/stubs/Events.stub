@@ -41,6 +41,8 @@ class {{ class }}
 
     public static function onWorkerStart(BusinessWorker $worker)
     {
+        var_dump(sprintf('%s #%s start', $worker->name, $worker->id));
+
         create_laravel_application_for_worker($worker);
     }
 
