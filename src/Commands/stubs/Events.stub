@@ -41,7 +41,7 @@ class {{ class }}
 
     public static function onWorkerStart(BusinessWorker $worker)
     {
-        var_dump(sprintf('%s #%s start', $worker->name, $worker->id));
+        dump(sprintf('%s #%s start', $worker->name, $worker->id));
 
         create_laravel_application_for_worker($worker);
     }
@@ -49,7 +49,7 @@ class {{ class }}
     public static function onConnect(string $client_id)
     {
         // 建立连接
-        var_dump(sprintf('client_id #%s connect', $client_id));
+        dump(sprintf('client_id #%s connect', $client_id));
     }
 
     public static function onMessage()
@@ -60,9 +60,9 @@ class {{ class }}
 
         // dump($_SERVER);
         // dump($_SESSION);
-        // var_dump('debug mode enable? ' . config('app.debug'));
-        // var_dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
-        // var_dump('receive data: ' . var_export($data, true));
+        // dump('debug mode enable? ' . config('app.debug'));
+        // dump(sprintf('client_id %s send to server message: %s', $client_id, $message));
+        // dump('receive data: ' . var_export($data, true));
 
         // Gateway::bindUid($client_id, $uid = uniqid());
         // Gateway::sendToUid($uid, 'you said: ' . $message);
@@ -122,11 +122,11 @@ class {{ class }}
     public static function onClose(string $client_id)
     {
         // 清理数据
-        var_dump(sprintf('client_id #%s disconnect', $client_id));
+        dump(sprintf('client_id #%s disconnect', $client_id));
     }
 
     public static function onWorkerStop(BusinessWorker $worker)
     {
-        var_dump(sprintf('%s #%s stop', $worker->name, $worker->id));
+        dump(sprintf('%s #%s stop', $worker->name, $worker->id));
     }
 }
