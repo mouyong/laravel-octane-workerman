@@ -39,6 +39,21 @@ class {{ class }}
         return $data;
     }
 
+    public static function sendToClient(string $client_id, string $message)
+    {
+        return Gateway::sendToClient($client_id, $message);
+    }
+
+    public static function sendToGroup(string $group_name, string $message)
+    {
+        return Gateway::sendToGroup($group_name, $message);
+    }
+
+    public static function sendToAll(string $message)
+    {
+        return Gateway::sendToAll($message);
+    }
+
     public static function onWorkerStart(BusinessWorker $worker)
     {
         dump(sprintf('%s #%s start', $worker->name, $worker->id));
