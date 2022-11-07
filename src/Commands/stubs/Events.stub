@@ -56,9 +56,9 @@ class {{ class }}
 
     public static function onWorkerStart(BusinessWorker $worker)
     {
-        dump(sprintf('%s #%s start', $worker->name, $worker->id));
-
         create_laravel_application_for_worker($worker);
+
+        dump(sprintf('%s #%s start', $worker->name, $worker->id));
     }
 
     public static function onConnect(string $client_id)
